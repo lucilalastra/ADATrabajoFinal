@@ -25,15 +25,15 @@ public class EmpleadoController {
     }
 
     @GetMapping
-    public ResponseEntity retrieve() {
+    public ResponseEntity consultarEmpleados() {
 
         return new ResponseEntity(empleadoService.retrieveAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{empleadoId}")
-    public ResponseEntity retrieveById(@PathVariable Integer empleadoId){
+    public ResponseEntity consultarEmpleadoId(@PathVariable Integer empleadoId){
         try {
-            EmpleadoDto empleadoDto = empleadoService.retrieveById(empleadoId);
+            EmpleadoDto empleadoDto = empleadoService.consultarEmpleadoId(empleadoId);
 
             return new ResponseEntity(empleadoDto, HttpStatus.OK);
         } catch (Exception e){
@@ -42,9 +42,9 @@ public class EmpleadoController {
     }
 
     @DeleteMapping("/{empleadoId}")
-    public ResponseEntity deleteById(@PathVariable Integer empleadoId) {
+    public ResponseEntity eliminarEmpleadoId(@PathVariable Integer empleadoId) {
         try {
-            empleadoService.deleteById(empleadoId);
+            empleadoService.eliminarEmpleadoId(empleadoId);
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity("Empleado no encontrado", HttpStatus.NOT_FOUND);

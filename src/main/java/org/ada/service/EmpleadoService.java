@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,7 +39,7 @@ public class EmpleadoService {
                 .collect(Collectors.toList());
     }
 
-    public EmpleadoDto retrieveById (Integer id) throws Exception{
+    public EmpleadoDto consultarEmpleadoId(Integer id) throws Exception{
         Optional<Empleado> empleado = empleadoRepository.findById(id);
         if (!empleado.isPresent()){
             throw new RuntimeException("El empleado consultado no existe.");
@@ -49,7 +48,7 @@ public class EmpleadoService {
         return mapToDTO(empleado.get());
     }
 
-    public void deleteById (Integer id) throws Exception {
+    public void eliminarEmpleadoId(Integer id) throws Exception {
         empleadoRepository.deleteById(id);
     }
 
