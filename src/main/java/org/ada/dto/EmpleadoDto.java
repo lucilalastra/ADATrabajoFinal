@@ -3,6 +3,8 @@ package org.ada.dto;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import org.ada.entity.*;
 
+import java.util.List;
+
 public class EmpleadoDto {
 
     private int id;
@@ -30,9 +32,11 @@ public class EmpleadoDto {
 
     private Status status;
 
+    private List<ReciboDeSueldoDto> recibosDeSueldo;
+
     public EmpleadoDto(int id, String nombre, String apellido, TipoIdentificacion tipoIdentificacion,
                        int numeroIdentificacion, String domicilio, String correoElectronico,
-                       String numeroTelefono, String fechaIngreso, TipoContrato tipoContrato, Status status) {
+                       String numeroTelefono, String fechaIngreso, TipoContrato tipoContrato, Status status, List<ReciboDeSueldoDto> recibosDeSueldo) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -44,6 +48,7 @@ public class EmpleadoDto {
         this.fechaIngreso = fechaIngreso;
         this.tipoContrato = tipoContrato;
         this.status = status;
+        this.recibosDeSueldo = recibosDeSueldo;
     }
 
     public int getId() {
@@ -133,5 +138,13 @@ public class EmpleadoDto {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public void setRecibosDeSueldo(List<ReciboDeSueldoDto> recibosDeSueldo) {
+        this.recibosDeSueldo = recibosDeSueldo;
+    }
+
+    public List<ReciboDeSueldoDto> getRecibosDeSueldo() {
+        return recibosDeSueldo;
     }
 }

@@ -2,14 +2,13 @@ package org.ada.service;
 
 import org.ada.dto.EmpleadoDto;
 import org.ada.entity.Empleado;
-import org.ada.entity.ObraSocial;
-import org.ada.entity.RazonSocial;
+import org.ada.entity.ReciboDeSueldo;
+import org.ada.exception.ResourceNotFoundException;
 import org.ada.repository.EmpleadoRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,8 +20,11 @@ public class EmpleadoService {
     static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private final EmpleadoRepository empleadoRepository;
 
-    public EmpleadoService(EmpleadoRepository empleadoRepository) {
+    private final ReciboDeSueldoService reciboDeSueldoService;
+
+    public EmpleadoService(EmpleadoRepository empleadoRepository, ReciboDeSueldoService reciboDeSueldoService) {
         this.empleadoRepository = empleadoRepository;
+        this.reciboDeSueldoService = reciboDeSueldoService;
     }
 
     public EmpleadoDto create (EmpleadoDto empleadoDto) {
@@ -31,7 +33,7 @@ public class EmpleadoService {
         return empleadoDto;
     }
 
-    public List<EmpleadoDto> retrieveAll(){
+    public List<EmpleadoDto> consultarTodos(){
         List<Empleado> empleados = empleadoRepository.findAll();
 
         return empleados.stream()
@@ -42,7 +44,7 @@ public class EmpleadoService {
     public EmpleadoDto consultarEmpleadoId(Integer id) throws Exception{
         Optional<Empleado> empleado = empleadoRepository.findById(id);
         if (!empleado.isPresent()){
-            throw new RuntimeException("El empleado consultado no existe.");
+            throw new ResourceNotFoundException("El empleado consultado no existe.");
         }
 
         return mapToDTO(empleado.get());
@@ -53,13 +55,15 @@ public class EmpleadoService {
     }
 
     private Empleado mapToEntity(EmpleadoDto empleadoDto) {
-        RazonSocial razonSocial = new RazonSocial(1, "1212121212", "Lula SA", "domicilio", new ArrayList<>());
-        ObraSocial obraSocial = new ObraSocial(155, "25-36789-6", "osecac", "laprida 123");
         Empleado empleado = new Empleado(empleadoDto.getId(), empleadoDto.getNombre(), empleadoDto.getApellido(),
                 empleadoDto.getTipoIdentificacion(), empleadoDto.getNumeroIdentificacion(), empleadoDto.getDomicilio(),
                 empleadoDto.getCorreoElectronico(), empleadoDto.getNumeroTelefono(),
                 LocalDate.parse(empleadoDto.getFechaIngreso(), DATE_TIME_FORMATTER),
                 empleadoDto.getTipoContrato(), empleadoDto.getStatus());
+
+        List<ReciboDeSueldo> reciboDeSueldos = reciboDeSueldoService.mapToEntitys(empleadoDto.getRecibosDeSueldo(), empleado);
+
+        empleado.setReciboDeSueldos(reciboDeSueldos);
 
         return empleado;
     }
@@ -68,7 +72,7 @@ public class EmpleadoService {
         EmpleadoDto empleadoDto = new EmpleadoDto(empleado.getId(), empleado.getNombre(), empleado.getApellido(),
                 empleado.getTipoIdentificacion(), empleado.getNumeroIdentificacion(), empleado.getDomicilio(),
                 empleado.getCorreoElectronico(), empleado.getNumeroTelefono(), empleado.getFechaIngreso().toString(),
-                empleado.getTipoContrato(), empleado.getStatus());
+                empleado.getTipoContrato(), empleado.getStatus(), reciboDeSueldoService.mapToDtos(empleado.getReciboDeSueldos()));
 
         return empleadoDto;
     }

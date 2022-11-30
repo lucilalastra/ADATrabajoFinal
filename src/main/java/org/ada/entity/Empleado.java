@@ -1,8 +1,12 @@
 package org.ada.entity;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "empleado")
@@ -63,6 +67,9 @@ public class Empleado {
     @Enumerated(EnumType.STRING)
     @Column
     private Status status;
+
+    @OneToMany(mappedBy = "empleado", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<ReciboDeSueldo> reciboDeSueldos;
 
     public int getId() {
         return id;
@@ -150,5 +157,13 @@ public class Empleado {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public List<ReciboDeSueldo> getReciboDeSueldos() {
+        return reciboDeSueldos;
+    }
+
+    public void setReciboDeSueldos(List<ReciboDeSueldo> reciboDeSueldos) {
+        this.reciboDeSueldos = reciboDeSueldos;
     }
 }
