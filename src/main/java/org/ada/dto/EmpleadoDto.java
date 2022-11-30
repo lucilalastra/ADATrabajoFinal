@@ -34,6 +34,8 @@ public class EmpleadoDto {
 
     private List<ReciboDeSueldoDto> recibosDeSueldo;
 
+    private LegajoDto legajoDto;
+
     public EmpleadoDto(int id, String nombre, String apellido, TipoIdentificacion tipoIdentificacion,
                        int numeroIdentificacion, String domicilio, String correoElectronico,
                        String numeroTelefono, String fechaIngreso, TipoContrato tipoContrato, Status status, List<ReciboDeSueldoDto> recibosDeSueldo) {

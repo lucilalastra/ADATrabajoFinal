@@ -8,6 +8,9 @@ public class ReciboDeSueldoDto {
 
     private int idEmpleado;
 
+    public ReciboDeSueldoDto() {
+    }
+
     public ReciboDeSueldoDto(int id, String puesto, long sueldo, int idEmpleado) {
         this.id = id;
         this.puesto = puesto;

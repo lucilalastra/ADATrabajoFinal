@@ -12,25 +12,6 @@ import java.util.List;
 @Table(name = "empleado")
 public class Empleado {
 
-    public Empleado() {
-    }
-
-    public Empleado(int id, String nombre, String apellido, TipoIdentificacion tipoIdentificacion, int numeroIdentificacion,
-                    String domicilio, String correoElectronico, String numeroTelefono,
-                    LocalDate fechaIngreso, TipoContrato tipoContrato, Status status) {
-        this.id = id;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.tipoIdentificacion = tipoIdentificacion;
-        this.numeroIdentificacion = numeroIdentificacion;
-        this.domicilio = domicilio;
-        this.correoElectronico = correoElectronico;
-        this.numeroTelefono = numeroTelefono;
-        this.fechaIngreso = fechaIngreso;
-        this.tipoContrato = tipoContrato;
-        this.status = status;
-    }
-
     @Id
     @Column (nullable = false)
     private int id;
@@ -70,6 +51,29 @@ public class Empleado {
 
     @OneToMany(mappedBy = "empleado", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ReciboDeSueldo> reciboDeSueldos;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "legajo_id", referencedColumnName = "id")
+    private Legajo legajo;
+
+    public Empleado() {
+    }
+
+    public Empleado(int id, String nombre, String apellido, TipoIdentificacion tipoIdentificacion, int numeroIdentificacion,
+                    String domicilio, String correoElectronico, String numeroTelefono,
+                    LocalDate fechaIngreso, TipoContrato tipoContrato, Status status) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.tipoIdentificacion = tipoIdentificacion;
+        this.numeroIdentificacion = numeroIdentificacion;
+        this.domicilio = domicilio;
+        this.correoElectronico = correoElectronico;
+        this.numeroTelefono = numeroTelefono;
+        this.fechaIngreso = fechaIngreso;
+        this.tipoContrato = tipoContrato;
+        this.status = status;
+    }
 
     public int getId() {
         return id;
