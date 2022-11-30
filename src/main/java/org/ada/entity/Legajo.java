@@ -17,6 +17,15 @@ public class Legajo {
     @OneToOne (mappedBy = "legajo")
     private Empleado empleado;
 
+    public Legajo() {
+    }
+
+    public Legajo(int id, int numeroLegajo, Empleado empleado) {
+        this.id = id;
+        this.numeroLegajo = numeroLegajo;
+        this.empleado = empleado;
+    }
+
     public int getId() {
         return id;
     }

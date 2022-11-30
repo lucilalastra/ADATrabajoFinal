@@ -38,7 +38,8 @@ public class EmpleadoDto {
 
     public EmpleadoDto(int id, String nombre, String apellido, TipoIdentificacion tipoIdentificacion,
                        int numeroIdentificacion, String domicilio, String correoElectronico,
-                       String numeroTelefono, String fechaIngreso, TipoContrato tipoContrato, Status status, List<ReciboDeSueldoDto> recibosDeSueldo) {
+                       String numeroTelefono, String fechaIngreso, TipoContrato tipoContrato, Status status,
+                       List<ReciboDeSueldoDto> recibosDeSueldo, LegajoDto legajoDto) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -51,6 +52,7 @@ public class EmpleadoDto {
         this.tipoContrato = tipoContrato;
         this.status = status;
         this.recibosDeSueldo = recibosDeSueldo;
+        this.legajoDto = legajoDto;
     }
 
     public int getId() {
@@ -148,5 +150,13 @@ public class EmpleadoDto {
 
     public List<ReciboDeSueldoDto> getRecibosDeSueldo() {
         return recibosDeSueldo;
+    }
+
+    public LegajoDto getLegajoDto() {
+        return legajoDto;
+    }
+
+    public void setLegajoDto(LegajoDto legajoDto) {
+        this.legajoDto = legajoDto;
     }
 }

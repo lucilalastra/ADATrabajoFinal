@@ -1,7 +1,9 @@
 package org.ada.service;
 
 import org.ada.dto.EmpleadoDto;
+import org.ada.dto.LegajoDto;
 import org.ada.entity.Empleado;
+import org.ada.entity.Legajo;
 import org.ada.entity.ReciboDeSueldo;
 import org.ada.exception.ResourceNotFoundException;
 import org.ada.repository.EmpleadoRepository;
@@ -28,13 +30,13 @@ public class EmpleadoService {
     }
 
     public EmpleadoDto create (EmpleadoDto empleadoDto) {
-        Empleado empleado = mapToEntity (empleadoDto);
+        Empleado empleado = mapToEntity (empleadoDto); //mapeo dto a entidad
         empleadoRepository.save(empleado);
         return empleadoDto;
     }
 
     public List<EmpleadoDto> consultarTodos(){
-        List<Empleado> empleados = empleadoRepository.findAll();
+        List<Empleado> empleados = empleadoRepository.findAll(); //buscar todos empleados
 
         return empleados.stream()
                 .map(empleado -> mapToDTO(empleado))
@@ -51,7 +53,7 @@ public class EmpleadoService {
     }
 
     public void eliminarEmpleadoId(Integer id) throws Exception {
-        empleadoRepository.deleteById(id);
+        empleadoRepository.deleteById(id); //si no encuentra, lanza excepción
     }
 
     private Empleado mapToEntity(EmpleadoDto empleadoDto) {
@@ -62,18 +64,35 @@ public class EmpleadoService {
                 empleadoDto.getTipoContrato(), empleadoDto.getStatus());
 
         List<ReciboDeSueldo> reciboDeSueldos = reciboDeSueldoService.mapToEntitys(empleadoDto.getRecibosDeSueldo(), empleado);
+        Legajo legajo = convertirALegajo(empleadoDto.getLegajoDto(), empleado);
 
+        empleado.setLegajo(legajo);
         empleado.setReciboDeSueldos(reciboDeSueldos);
 
         return empleado;
     }
 
     private EmpleadoDto mapToDTO(Empleado empleado) {
+
+        LegajoDto legajoDto = null;
+        if (empleado.getLegajo() != null) {
+            legajoDto = convertirLegDto(empleado.getLegajo());
+        }
+
         EmpleadoDto empleadoDto = new EmpleadoDto(empleado.getId(), empleado.getNombre(), empleado.getApellido(),
                 empleado.getTipoIdentificacion(), empleado.getNumeroIdentificacion(), empleado.getDomicilio(),
                 empleado.getCorreoElectronico(), empleado.getNumeroTelefono(), empleado.getFechaIngreso().toString(),
-                empleado.getTipoContrato(), empleado.getStatus(), reciboDeSueldoService.mapToDtos(empleado.getReciboDeSueldos()));
+                empleado.getTipoContrato(), empleado.getStatus(), reciboDeSueldoService.mapToDtos(empleado.getReciboDeSueldos()),
+                legajoDto);
 
         return empleadoDto;
+    }
+
+    public LegajoDto convertirLegDto (Legajo legajo){
+        return new LegajoDto(legajo.getId(), legajo.getNumeroLegajo(), legajo.getEmpleado().getId());
+    }
+
+    public Legajo convertirALegajo(LegajoDto legajoDto, Empleado empleado){
+        return new Legajo(legajoDto.getId(), legajoDto.getNumeroLegajo(), empleado);
     }
 }

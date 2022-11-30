@@ -170,4 +170,12 @@ public class Empleado {
     public void setReciboDeSueldos(List<ReciboDeSueldo> reciboDeSueldos) {
         this.reciboDeSueldos = reciboDeSueldos;
     }
+
+    public Legajo getLegajo() {
+        return legajo;
+    }
+
+    public void setLegajo(Legajo legajo) {
+        this.legajo = legajo;
+    }
 }
